@@ -123,7 +123,6 @@ def hletterdetect(m,x,y):
 
 def solvepuzzle(m):
     lettersarray, noise = identifyletters(m)
-    print(noise)
     lettersarray = validate(lettersarray, noise)
     return "".join([l.name for l in lettersarray])
 
@@ -134,20 +133,20 @@ def identifyletters(m):
     
     for i in range(h-4):
         for j in range(w-4):
-            l = hletterdetect(m[i:i+3,j:j+5],i,j)
+            l = hletterdetect(m[i:i+3,j:j+5],j,i)
             if l:
                 lettersarray.append(l)
                 m[i:i+3,j:j+5]=np.zeros((3,5))
                 continue
                 
-            l = vletterdetect(m[i:i+5,j:j+3],i,j)
+            l = vletterdetect(m[i:i+5,j:j+3],j,i)
             if l:
                 lettersarray.append(l)
                 m[i:i+5,j:j+3]=np.zeros((5,3))
                 continue
             
         for j in range(w-4, w-2):
-            l = vletterdetect(m[i:i+5,j:j+3],i,j)
+            l = vletterdetect(m[i:i+5,j:j+3],j,i)
             if l:
                 lettersarray.append(l)
                 m[i:i+5,j:j+3]=np.zeros((5,3))
@@ -155,7 +154,7 @@ def identifyletters(m):
 
     for i in range(h-4, h-2):
         for j in range(w-4):
-            l = hletterdetect(m[i:i+3,j:j+5],i,j)
+            l = hletterdetect(m[i:i+3,j:j+5],j,i)
             if l:
                 lettersarray.append(l)
                 m[i:i+3,j:j+5]=np.zeros((3,5))
@@ -164,7 +163,36 @@ def identifyletters(m):
     return [lettersarray,np.transpose(np.nonzero(m))]
 
 def validate(lettersarray, noise):
+    while True:
+        invalid = []
+        for i in range(len(lettersarray)):
+            for n in noise:
+                if isadjacent(lettersarray[i],n):
+                    invalid.append(i)
+                    noise = np.append(noise, [lettersarray[i].y,lettersarray[i].x]+letterdict[lettersarray[i].name][lettersarray[i].orientation], axis=0)
+                    break
+
+        if invalid:
+            invalid.reverse()
+            for i in invalid:
+                del lettersarray[i]
+        else:
+            break
+
     return lettersarray
+
+def isadjacent(l,n):
+    if l.orientation%2 == 0:
+        if l.x<=n[1] and n[1]<l.x+3 and (n[0]==l.y-1 or n[0]==l.y+5):
+            return True
+        if l.y<=n[0] and n[0]<l.y+5 and (n[1]==l.x-1 or n[1]==l.x+3):
+            return True
+    else:
+        if l.x<=n[1] and n[1]<l.x+5 and (n[0]==l.y-1 or n[0]==l.y+3):
+            return True
+        if l.y<=n[0] and n[0]<l.y+3 and (n[1]==l.x-1 or n[1]==l.x+5):
+            return True
+
 
 if __name__ == '__main__' :
 
@@ -175,7 +203,6 @@ if __name__ == '__main__' :
     teamStreetAdress = "817, 54e avenue, Lachine"
 
     solutions = [solvepuzzle(np.array([[x=="X" for x in l] for l in m], dtype='int')) for m in puzzle]
-    print(solutions)
 
     #with open("team.json", "r") as f:
     #    team_data = json.load(f)
@@ -183,6 +210,7 @@ if __name__ == '__main__' :
     output = {
         "teamName": teamName,
         "teamStreetAdress": teamStreetAdress,
+        "solutions": solutions
     #    "participants": team_data["participants"]
     }
 
