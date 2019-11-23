@@ -5,66 +5,166 @@ import json
 import numpy as np
 
 class letter:
-    def __init__(name, orientation, position):
+    def __init__(self, name, orientation, x, y):
         self.name = name
         self.orientation = orientation
-        self.position = position
+        self.x = x
+        self.y = y
 
-vletterdict = {
-    "[1 1 1 1 0 0 1 0 0 1 0 0 1 1 1]": ["C",0],
-    "[1 1 1 0 0 1 0 0 1 0 0 1 1 1 1]": ["C",2],
-    "[1 1 1 1 0 1 1 0 1 1 0 1 1 1 1]": ["O",0],
-    "[1 0 1 1 0 1 1 0 1 1 0 1 0 1 0]": ["V",0],
-    "[0 1 0 1 0 1 1 0 1 1 0 1 1 0 1]": ["V",2],
-    "[1 1 1 1 0 0 1 1 1 1 0 0 1 1 1]": ["E",0],
-    "[1 1 1 0 0 1 1 1 1 0 0 1 1 1 1]": ["E",2]
-}
+C0 = np.array([[1,1,1],
+               [1,0,0],
+               [1,0,0],
+               [1,0,0],
+               [1,1,1]])
 
-hletterdict = {
-    "[1 0 0 0 1 1 0 0 0 1 1 1 1 1 1]": ["C",1],
-    "[1 1 1 1 1 1 0 0 0 1 1 0 0 0 1]": ["C",3],
-    "[1 1 1 1 1 1 0 0 0 1 1 1 1 1 1]": ["O",1],
-    "[1 1 1 1 0 0 0 0 0 1 1 1 1 1 0]": ["V",1],
-    "[0 1 1 1 1 1 0 0 0 0 0 1 1 1 1]": ["V",3],
-    "[1 0 1 0 1 1 0 1 0 1 1 1 1 1 1]": ["E",1],
-    "[1 1 1 1 1 1 0 1 0 1 1 0 1 0 1]": ["E",3]
-}
+C1 = np.array([[1,0,0,0,1],
+               [1,0,0,0,1],
+               [1,1,1,1,1]])
 
+C2 = np.array([[1,1,1],
+               [0,0,1],
+               [0,0,1],
+               [0,0,1],
+               [1,1,1]])
+
+C3 = np.array([[1,1,1,1,1],
+               [1,0,0,0,1],
+               [1,0,0,0,1]])
+
+E0 = np.array([[1,1,1],
+               [1,0,0],
+               [1,1,1],
+               [1,0,0],
+               [1,1,1]])
+
+E1 = np.array([[1,0,1,0,1],
+               [1,0,1,0,1],
+               [1,1,1,1,1]])
+
+E2 = np.array([[1,1,1],
+               [0,0,1],
+               [1,1,1],
+               [0,0,1],
+               [1,1,1]])
+
+E3 = np.array([[1,1,1,1,1],
+               [1,0,1,0,1],
+               [1,0,1,0,1]])
+
+O0 = np.array([[1,1,1],
+               [1,0,1],
+               [1,0,1],
+               [1,0,1],
+               [1,1,1]])
+
+O1 = np.array([[1,1,1,1,1],
+               [1,0,0,0,1],
+               [1,1,1,1,1]])
+
+V0 = np.array([[1,0,1],
+               [1,0,1],
+               [1,0,1],
+               [1,0,1],
+               [0,1,0]])
+
+V1 = np.array([[1,1,1,1,0],
+               [0,0,0,0,1],
+               [1,1,1,1,0]])
+
+V2 = np.array([[0,1,0],
+               [1,0,1],
+               [1,0,1],
+               [1,0,1],
+               [1,0,1]])
+
+V3 = np.array([[0,1,1,1,1],
+               [1,0,0,0,0],
+               [0,1,1,1,1]])
+
+letterdict = {"C": [np.transpose(np.nonzero(C0)),np.transpose(np.nonzero(C1)),np.transpose(np.nonzero(C2)),np.transpose(np.nonzero(C3))],
+              "E": [np.transpose(np.nonzero(E0)),np.transpose(np.nonzero(E1)),np.transpose(np.nonzero(E2)),np.transpose(np.nonzero(E3))],
+              "O": [np.transpose(np.nonzero(O0)),np.transpose(np.nonzero(O1))],
+              "V": [np.transpose(np.nonzero(V0)),np.transpose(np.nonzero(V1)),np.transpose(np.nonzero(V2)),np.transpose(np.nonzero(V3))]}
+
+
+def vletterdetect(m,x,y):
+    if np.array_equal(m,C0):
+        return letter("C",0,x,y)
+    if np.array_equal(m,C2):
+        return letter("C",2,x,y)
+    if np.array_equal(m,E0):
+        return letter("E",0,x,y)
+    if np.array_equal(m,E2):
+        return letter("E",2,x,y)
+    if np.array_equal(m,O0):
+        return letter("O",0,x,y)
+    if np.array_equal(m,V0):
+        return letter("V",0,x,y)
+    if np.array_equal(m,V2):
+        return letter("V",2,x,y)
+    return False
+
+def hletterdetect(m,x,y):
+    if np.array_equal(m,C1):
+        return letter("C",1,x,y)
+    if np.array_equal(m,C3):
+        return letter("C",3,x,y)
+    if np.array_equal(m,E1):
+        return letter("E",1,x,y)
+    if np.array_equal(m,E3):
+        return letter("E",3,x,y)
+    if np.array_equal(m,O1):
+        return letter("O",1,x,y)
+    if np.array_equal(m,V1):
+        return letter("V",1,x,y)
+    if np.array_equal(m,V3):
+        return letter("V",3,x,y)
+    return False
 
 def solvepuzzle(m):
-    letters, noise = identifyletters(m)
-    letters = validate(letters, noise)
-    return letters
+    lettersarray, noise = identifyletters(m)
+    print(noise)
+    lettersarray = validate(lettersarray, noise)
+    return "".join([l.name for l in lettersarray])
 
 def identifyletters(m):
     h = m.shape[0]
     w = m.shape[1]
-    letters = []
+    lettersarray = []
     
     for i in range(h-4):
         for j in range(w-4):
-            l = hletterdict.get(str(m[i:i+4,j:j+2].flatten),False)
+            l = hletterdetect(m[i:i+3,j:j+5],i,j)
             if l:
-                letters.append(letter(l[0],l[1],[i,j]))
-                m[i:i+4,j:j+2]=np.zeros((3,5))
+                lettersarray.append(l)
+                m[i:i+3,j:j+5]=np.zeros((3,5))
                 continue
                 
-            l = vletterdict.get(str(m[i:i+2,j:j+4].flatten),False)
+            l = vletterdetect(m[i:i+5,j:j+3],i,j)
             if l:
-                letters.append(letter(l[0],l[1],[i,j]))
-                m[i:i+2,j:j+4]=np.zeros((5,3))
+                lettersarray.append(l)
+                m[i:i+5,j:j+3]=np.zeros((5,3))
                 continue
             
         for j in range(w-4, w-2):
-            continue
+            l = vletterdetect(m[i:i+5,j:j+3],i,j)
+            if l:
+                lettersarray.append(l)
+                m[i:i+5,j:j+3]=np.zeros((5,3))
+                continue
+
     for i in range(h-4, h-2):
         for j in range(w-4):
-            continue
+            l = hletterdetect(m[i:i+3,j:j+5],i,j)
+            if l:
+                lettersarray.append(l)
+                m[i:i+3,j:j+5]=np.zeros((3,5))
+                continue
     
-    return [letters,[]]
+    return [lettersarray,np.transpose(np.nonzero(m))]
 
-def validate(letters, noise):
-    return letters
+def validate(lettersarray, noise):
+    return lettersarray
 
 if __name__ == '__main__' :
 
