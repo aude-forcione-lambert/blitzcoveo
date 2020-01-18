@@ -7,9 +7,9 @@ import copy
 class Bot:
 
     def __init__(self):
-        plannedPath: List(Move) = []
-        planets: List(Point) = []
-        blitz: List(Point) = []
+        self.plannedPath: List(Move) = []
+        self.planets: List(Point) = []
+        self.blitz: List(Point) = []
 
         '''
 		This method should be use to initialize some variables you will need throughout the game.
@@ -25,14 +25,14 @@ class Bot:
 
         try:
             if not plannedPath:
-                planets = creerListePlanetes(game)
-                blitz = creerListeBlitz(game)
+                self.planets = creerListePlanetes(game)
+                self.blitz = creerListeBlitz(game)
                 target: Point = self.getDestination(game, me)
                 path: List(Point) = self.findPath(me.position)
-                plannedPath = self.convert(path)
+                self.plannedPath = self.convert(path)
 
 
-            return pop(plannedPath)
+            return pop(self.plannedPath)
 
 
             #players_by_id: Dict[int, Player] = game_message.generate_players_by_id_dict()
@@ -104,46 +104,46 @@ class Bot:
         return move
 
 
-	def inList(self, point: Point, pointList: List[Point]):
-		for pointInList in pointList:
-			if point==pointInList:
-				return False
-		return True
+    def inList(self, point: Point, pointList: List[Point]):
+        for pointInList in pointList:
+            if point==pointInList:
+                return False
+        return True
 
 
-    def norme(self, u, v):
-        return abs(u.x - v.x) + abs(u.y - v.y);
+    def norm(self, u, v):
+        return abs(u.x - v.x) + abs(u.y - v.y)
 
 
     def creerListePlanetes(self, game: Game) -> List[Point]:
-          listePlanetes = []
+          listePlanetes: List[Point] = []
           for row in game.map:
-        for i in row:
-          if game.get_tile_type_at(i) == "%"
-            listePlanetes.append(i)
+            for i in row:
+              if game.get_tile_type_at(i) == "%"
+                listePlanetes.append(i)
           return listePlanetes
 
         def creerListeBlitz(self, game: Game) -> List[Point]:
           listeBlitz = []
           for row in game.map:
-        for i in row:
-          if game.get_tile_type_at(i) == "$"
-            listePlanetes.append(i)
+            for i in row:
+              if game.get_tile_type_at(i) == "$"
+                listePlanetes.append(i)
           return listePlanetes
 
-	def getDestination(self, me: Player, game: Game) -> Point:
-		m: int = 1000
-		pos: Point = me.position
-		for p in self.blitz:
-			if game._validate_tile_exists(p) != me.id
-				if abs(self.norm(me.position.x-p.x, me.position.y - p.y)) < m
-					m = abs(self.norm(me.position.x-p.x, me.position.y - p.y))
-					pos = p
-		for p in selfplanetes:
-			if game._validate_tile_exists(p) != me.id
-				if abs(self.norm(me.position.x-p.x, me.position.y - p.y)) < m
-					m = abs(self.norm(me.position.x-p.x, me.position.y - p.y))
-					pos = p
-	  return p
+    def getDestination(self, me: Player, game: Game) -> Point:
+        m: int = 1000
+        pos: Point = me.position
+        for p in self.blitz:
+            if game._validate_tile_exists(p) != me.id
+                if abs(self.norm(me.position.x-p.x, me.position.y - p.y)) < m
+                    m = abs(self.norm(me.position.x-p.x, me.position.y - p.y))
+                    pos = p
+        for p in self.planets:
+            if game._validate_tile_exists(p) != me.id
+                if abs(self.norm(me.position.x-p.x, me.position.y - p.y)) < m
+                    m = abs(self.norm(me.position.x-p.x, me.position.y - p.y))
+                    pos = p
+        return pos
 
 
