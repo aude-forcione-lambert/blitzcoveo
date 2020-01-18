@@ -20,3 +20,5 @@ class dist:
 	    if candidat<min:
 		min=candidat;
 	return min;
+
+	def mur(self, )
