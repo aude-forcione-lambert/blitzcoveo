@@ -70,12 +70,16 @@ class Bot:
         
         move: List[Move] = []
         
-        if game.get_tile_type_at(forward)!= TileType.ASTEROIDS: move.append(Move.FORWARD)
-        if game.get_tile_type_at(left) != TileType.ASTEROIDS: move.append(Move.TURN_LEFT)
-        if game.get_tile_type_at(right) != TileType.ASTEROIDS: move.append(Move.TURN_RIGHT)
+        if game.get_tile_type_at(forward)!= TileType.ASTEROIDS and inList(forward,me.tail): move.append(Move.FORWARD)
+        if game.get_tile_type_at(left) != TileType.ASTEROIDS and inList(forward,me.tail): move.append(Move.TURN_LEFT)
+        if game.get_tile_type_at(right) != TileType.ASTEROIDS and inList(forward,me.tail): move.append(Move.TURN_RIGHT)
             
          
-         
+    def inList(point: Point, pointList: List(Point)):
+        for pointInList in pointList:
+            if point==pointInList:
+                return False
+        return True
          
          
 
