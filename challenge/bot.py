@@ -34,6 +34,49 @@ class Bot:
         Your bot moves are relative to its direction, if you are in the DOWN direction.
         A TURN_RIGHT move will make your bot move left in the map visualization (replay or logs)
         '''
+        
+        
+        
         me: Player = players_by_id[game.player_id]
+        
+        position: Point = me.position
+        direction: Direction = me.direction
+        
+        up: Point = position
+        up.y += 1
+        down: Point = position
+        down.y -= 1
+        left: Point = position
+        left.x -= 1
+        right: Point = position
+        right.x += 1
+        
+        if direction==Direction.UP:
+            forward: Point = up
+            leftTurn: Point = left
+            rightTurn: Point = right
+        else if direction==Direction.DOWN:
+            forward: Point = down
+            leftTurn: Point = right
+            rightTurn: Point = left
+        else if direction==Direction.LEFT:
+            forward: Point = left
+            leftTurn: Point = down
+            rightTurn: Point = up
+        else if direction==Direction.RIGHT:
+            forward: Point = right
+            leftTurn: Point = up
+            rightTurn: Point = down
+        
+        move: List[Move] = []
+        
+        if Game.get_tile_type_at(forward)!=TileType.ASTEROIDS: move.append(MOVE.FORWARD)
+        if Game.get_tile_type_at(left)!=TileType.ASTEROIDS: move.append(MOVE.LEFT)
+        if Game.get_tile_type_at(right)!=TileType.ASTEROIDS: move.append(MOVE.RIGHT)
+            
+         
+         
+         
+         
 
-        return [move for move in Move]
+        return move
