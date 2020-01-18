@@ -6,32 +6,36 @@ import copy
 
 class Bot:
 
-	def __init__(self):
-		plannedPath: list(Move) = []
-		blitzAndPlanets: list(Point) = []
+    def __init__(self):
+        plannedPath: List(Move) = []
+        planets: List(Point) = []
+        blitz: List(Point) = []
 
-		'''
+        '''
 		This method should be use to initialize some variables you will need throughout the game.
 		'''
 
-	def get_next_move(self, game_message: GameMessage) -> Move:
-		'''
+    def get_next_move(self, game_message: GameMessage) -> Move:
+        '''
 		Here is where the magic happens, for now the moves are random. I bet you can do better ;)
 		'''
 
-		me: Player = players_by_id[game.player_id]
+        game = game_message.game
+        me: Player = players_by_id[game.player_id]
 
-		try:
-			if not plannedPath:
-				target: Point = self.getDestination(game, me)
-				path: list(Point) = self.findPath(me.position)
-				plannedPath = self.convert(path)
+        try:
+            if not plannedPath:
+                planets = creerListePlanetes(game)
+                blitz = creerListeBlitz(game)
+                target: Point = self.getDestination(game, me)
+                path: List(Point) = self.findPath(me.position)
+                plannedPath = self.convert(path)
 
 
-			return pop(plannedPath)
+            return pop(plannedPath)
 
 
-			#players_by_id: Dict[int, Player] = game_message.generate_players_by_id_dict()
+            #players_by_id: Dict[int, Player] = game_message.generate_players_by_id_dict()
 
 			#legal_moves = self.get_legal_moves_for_current_tick(game=game_message.game, players_by_id=players_by_id)
 
@@ -42,10 +46,10 @@ class Bot:
 
 			#return random.choice(legal_moves)
 		except:
-			print("something went wrong")
+            print("something went wrong")
 
-	def get_legal_moves_for_current_tick(self, game: Game, players_by_id: Dict[int, Player]) -> List[Move]:
-		'''
+    def get_legal_moves_for_current_tick(self, game: Game, players_by_id: Dict[int, Player]) -> List[Move]:
+        '''
 		You should define here what moves are legal for your current position and direction
 		so that your bot does not send a lethal move.
 
@@ -55,49 +59,49 @@ class Bot:
 
 
 
-		me: Player = players_by_id[game.player_id]
+        me: Player = players_by_id[game.player_id]
 
-		position: Point = me.position
-		direction: Direction = me.direction
+        position: Point = me.position
+        direction: Direction = me.direction
 
-		up: Point = copy.copy(position)
-		up.y = up.y-1
-		down: Point = copy.copy(position)
-		down.y = down.y+1
-		left: Point = copy.copy(position)
-		left.x = left.x-1
-		right: Point = copy.copy(position)
-		right.x = right.x+1
+        up: Point = copy.copy(position)
+        up.y = up.y-1
+        down: Point = copy.copy(position)
+        down.y = down.y+1
+        left: Point = copy.copy(position)
+        left.x = left.x-1
+        right: Point = copy.copy(position)
+        right.x = right.x+1
 
-		if direction==Direction.UP:
-			forward: Point = up
-			leftTurn: Point = left
-			rightTurn: Point = right
-		elif direction==Direction.DOWN:
-			forward: Point = down
-			leftTurn: Point = right
-			rightTurn: Point = left
-		elif direction==Direction.LEFT:
-			forward: Point = left
-			leftTurn: Point = down
-			rightTurn: Point = up
-		elif direction==Direction.RIGHT:
-			forward: Point = right
-			leftTurn: Point = up
-			rightTurn: Point = down
+        if direction==Direction.UP:
+            forward: Point = up
+            leftTurn: Point = left
+            rightTurn: Point = right
+        elif direction==Direction.DOWN:
+            forward: Point = down
+            leftTurn: Point = right
+            rightTurn: Point = left
+        elif direction==Direction.LEFT:
+            forward: Point = left
+            leftTurn: Point = down
+            rightTurn: Point = up
+        elif direction==Direction.RIGHT:
+            forward: Point = right
+            leftTurn: Point = up
+            rightTurn: Point = down
 
-		move: List[Move] = []
+        move: List[Move] = []
 
-		#if game.get_tile_type_at(forward)!= TileType.ASTEROIDS and not self.inList(forward,me.tail): move.append(Move.FORWARD)
-		#if game.get_tile_type_at(left) != TileType.ASTEROIDS and not self.inList(left,me.tail): move.append(Move.TURN_LEFT)
-		#if game.get_tile_type_at(right) != TileType.ASTEROIDS and not self.inList(right,me.tail): move.append(Move.TURN_RIGHT)
+        #if game.get_tile_type_at(forward)!= TileType.ASTEROIDS and not self.inList(forward,me.tail): move.append(Move.FORWARD)
+        #if game.get_tile_type_at(left) != TileType.ASTEROIDS and not self.inList(left,me.tail): move.append(Move.TURN_LEFT)
+        #if game.get_tile_type_at(right) != TileType.ASTEROIDS and not self.inList(right,me.tail): move.append(Move.TURN_RIGHT)
 
-		if game.get_tile_type_at(forward)!= TileType.ASTEROIDS: move.append(Move.FORWARD)
-		if game.get_tile_type_at(left) != TileType.ASTEROIDS: move.append(Move.TURN_LEFT)
-		if game.get_tile_type_at(right) != TileType.ASTEROIDS: move.append(Move.TURN_RIGHT)
+        if game.get_tile_type_at(forward)!= TileType.ASTEROIDS: move.append(Move.FORWARD)
+        if game.get_tile_type_at(left) != TileType.ASTEROIDS: move.append(Move.TURN_LEFT)
+        if game.get_tile_type_at(right) != TileType.ASTEROIDS: move.append(Move.TURN_RIGHT)
 
 
-		return move
+        return move
 
 
 	def inList(self, point: Point, pointList: List[Point]):
@@ -107,7 +111,7 @@ class Bot:
 		return True
 
 
-    def function norme(self, u, v):
+    def norme(self, u, v):
         return abs(u.x - v.x) + abs(u.y - v.y);
 
 
