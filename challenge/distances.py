@@ -13,7 +13,7 @@ class dist:
 		    min=candidat;
 	return min;
 
-    def surete(self,vaisseau,maison)
+    def surete(self,vaisseau,maison):
 	min = 100;
 	for m in maison:
 	    candidat = norme1(vaisseau,m)
