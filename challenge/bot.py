@@ -8,6 +8,9 @@ import copy
 class Bot:
 
     def __init__(self):
+        plannedPath: list(Move) = []
+        blitzAndPlanets: list(Point) = []
+
         '''
         This method should be use to initialize some variables you will need throughout the game.
         '''
@@ -17,17 +20,28 @@ class Bot:
         Here is where the magic happens, for now the moves are random. I bet you can do better ;)
         '''
 
-        try:
-            players_by_id: Dict[int, Player] = game_message.generate_players_by_id_dict()
+        me: Player = players_by_id[game.player_id]
 
-            legal_moves = self.get_legal_moves_for_current_tick(game=game_message.game, players_by_id=players_by_id)
+        try:
+            if not plannedPath:
+                target: Point = self.getDestination(game, me)
+                path: list(Point) = self.findPath(me.position)
+                plannedPath = self.convert(path)
+
+
+            return pop(plannedPath)
+
+
+            #players_by_id: Dict[int, Player] = game_message.generate_players_by_id_dict()
+
+            #legal_moves = self.get_legal_moves_for_current_tick(game=game_message.game, players_by_id=players_by_id)
 
 
             # You can print out a pretty version of the map but be aware that
             # printing out long strings can impact your bot performance (30 ms in average).
             # print(game_message.game.pretty_map)
 
-            return random.choice(legal_moves)
+            #return random.choice(legal_moves)
         except:
             print("something went wrong")
 
