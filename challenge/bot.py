@@ -106,6 +106,24 @@ class Bot:
             if point==pointInList:
                 return False
         return True
-         
-         
+
+     
+    def creerListePlanetes(self, game: Game) -> List[Point]:
+      listePlanetes = []
+      for row in game.map:
+	for i in row:
+	  if game.get_tile_type_at(i) == "%"
+	    listePlanetes.append(i)
+      return listePlanetes
+
+    def creerListeBlitz(self, game: Game) -> List[Point]:
+      listeBlitz = []
+      for row in game.map:
+	for i in row:
+	  if game.get_tile_type_at(i) == "$"
+	    listePlanetes.append(i)
+      return listePlanetes
+
+    def getDestination(self, me: Player, game: Game) -> Point: 
+      return
 

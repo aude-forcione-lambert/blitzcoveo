@@ -1,4 +1,4 @@
-function norme(u,v):
+def function norme(u,v):
     return abs(u.x-v.x)+abs(u.y-v.y);
 
 class dist:
