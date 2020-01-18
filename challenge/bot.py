@@ -2,6 +2,7 @@ from typing import Dict, List
 from game_message import *
 from bot_message import *
 import random
+import copy
 
 
 class Bot:
@@ -15,16 +16,20 @@ class Bot:
         '''
         Here is where the magic happens, for now the moves are random. I bet you can do better ;)
         '''
-        players_by_id: Dict[int, Player] = game_message.generate_players_by_id_dict()
 
-        legal_moves = self.get_legal_moves_for_current_tick(game=game_message.game, players_by_id=players_by_id)
+        try:
+            players_by_id: Dict[int, Player] = game_message.generate_players_by_id_dict()
+
+            legal_moves = self.get_legal_moves_for_current_tick(game=game_message.game, players_by_id=players_by_id)
 
 
-        # You can print out a pretty version of the map but be aware that
-        # printing out long strings can impact your bot performance (30 ms in average).
-        # print(game_message.game.pretty_map)
+            # You can print out a pretty version of the map but be aware that
+            # printing out long strings can impact your bot performance (30 ms in average).
+            # print(game_message.game.pretty_map)
 
-        return random.choice(legal_moves)
+            return random.choice(legal_moves)
+        except:
+            print("something went wrong")
 
     def get_legal_moves_for_current_tick(self, game: Game, players_by_id: Dict[int, Player]) -> List[Move]:
         '''
@@ -42,14 +47,14 @@ class Bot:
         position: Point = me.position
         direction: Direction = me.direction
         
-        up: Point = position
-        up.y += 1
-        down: Point = position
-        down.y -= 1
-        left: Point = position
-        left.x -= 1
-        right: Point = position
-        right.x += 1
+        up: Point = copy.copy(position)
+        up.y = up.y-1
+        down: Point = copy.copy(position)
+        down.y = down.y+1
+        left: Point = copy.copy(position)
+        left.x = left.x-1
+        right: Point = copy.copy(position)
+        right.x = right.x+1
         
         if direction==Direction.UP:
             forward: Point = up
@@ -70,12 +75,19 @@ class Bot:
         
         move: List[Move] = []
         
-        if game.get_tile_type_at(forward)!= TileType.ASTEROIDS and inList(forward,me.tail): move.append(Move.FORWARD)
-        if game.get_tile_type_at(left) != TileType.ASTEROIDS and inList(forward,me.tail): move.append(Move.TURN_LEFT)
-        if game.get_tile_type_at(right) != TileType.ASTEROIDS and inList(forward,me.tail): move.append(Move.TURN_RIGHT)
-            
-         
-    def inList(point: Point, pointList: List(Point)):
+        #if game.get_tile_type_at(forward)!= TileType.ASTEROIDS and not self.inList(forward,me.tail): move.append(Move.FORWARD)
+        #if game.get_tile_type_at(left) != TileType.ASTEROIDS and not self.inList(left,me.tail): move.append(Move.TURN_LEFT)
+        #if game.get_tile_type_at(right) != TileType.ASTEROIDS and not self.inList(right,me.tail): move.append(Move.TURN_RIGHT)
+
+        if game.get_tile_type_at(forward)!= TileType.ASTEROIDS: move.append(Move.FORWARD)
+        if game.get_tile_type_at(left) != TileType.ASTEROIDS: move.append(Move.TURN_LEFT)
+        if game.get_tile_type_at(right) != TileType.ASTEROIDS: move.append(Move.TURN_RIGHT)
+
+
+        return move
+
+
+    def inList(self, point: Point, pointList: List[Point]):
         for pointInList in pointList:
             if point==pointInList:
                 return False
@@ -83,4 +95,3 @@ class Bot:
          
          
 
-        return move
