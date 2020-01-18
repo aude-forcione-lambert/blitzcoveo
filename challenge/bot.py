@@ -128,5 +128,18 @@ class Bot:
           return listePlanetes
 
 	def getDestination(self, me: Player, game: Game) -> Point:
-	  return
+		m: int = 1000
+		pos: Point = me.position
+		for p in self.blitz:
+			if game._validate_tile_exists(p) != me.id
+				if abs(self.norm(me.position.x-p.x, me.position.y - p.y)) < m
+					m = abs(self.norm(me.position.x-p.x, me.position.y - p.y))
+					pos = p
+		for p in selfplanetes:
+			if game._validate_tile_exists(p) != me.id
+				if abs(self.norm(me.position.x-p.x, me.position.y - p.y)) < m
+					m = abs(self.norm(me.position.x-p.x, me.position.y - p.y))
+					pos = p
+	  return p
+
 
