@@ -55,24 +55,24 @@ class Bot:
             forward: Point = up
             leftTurn: Point = left
             rightTurn: Point = right
-        else if direction==Direction.DOWN:
+        elif direction==Direction.DOWN:
             forward: Point = down
             leftTurn: Point = right
             rightTurn: Point = left
-        else if direction==Direction.LEFT:
+        elif direction==Direction.LEFT:
             forward: Point = left
             leftTurn: Point = down
             rightTurn: Point = up
-        else if direction==Direction.RIGHT:
+        elif direction==Direction.RIGHT:
             forward: Point = right
             leftTurn: Point = up
             rightTurn: Point = down
         
         move: List[Move] = []
         
-        if Game.get_tile_type_at(forward)!=TileType.ASTEROIDS: move.append(MOVE.FORWARD)
-        if Game.get_tile_type_at(left)!=TileType.ASTEROIDS: move.append(MOVE.LEFT)
-        if Game.get_tile_type_at(right)!=TileType.ASTEROIDS: move.append(MOVE.RIGHT)
+        if game.get_tile_type_at(forward)!= TileType.ASTEROIDS: move.append(Move.FORWARD)
+        if game.get_tile_type_at(left) != TileType.ASTEROIDS: move.append(Move.TURN_LEFT)
+        if game.get_tile_type_at(right) != TileType.ASTEROIDS: move.append(Move.TURN_RIGHT)
             
          
          
