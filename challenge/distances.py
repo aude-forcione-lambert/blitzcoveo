@@ -14,9 +14,9 @@ class dist:
 	return min;
 
     def surete(self,vaisseau,maison):
-		min = 100;
-		for m in maison:
-	    	candidat = norme1(vaisseau,m)
-	    	if candidat<min:
-				min=candidat;
+	min = 100;
+	for m in maison:
+	    candidat = norme1(vaisseau,m)
+	    if candidat<min:
+		min=candidat;
 	return min;
